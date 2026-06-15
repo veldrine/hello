@@ -1,4 +1,4 @@
-name: Build Android APK
+name: tauri android
 
 on:
 push:
@@ -7,7 +7,7 @@ branches:
 workflow_dispatch:
 
 jobs:
-build-android:
+android:
 runs-on: ubuntu-latest
 
 steps:
@@ -26,7 +26,7 @@ steps:
       java-version: 17
 
   - name: Setup Rust
-    uses: dtolnay/rust-toolchain@sta:ble
+    uses: dtolnay/rust-toolchain@stable
     with:
       targets: |
         aarch64-linux-android
@@ -43,14 +43,14 @@ steps:
   - name: Install Tauri CLI
     run: cargo install tauri-cli
 
-  - name: Generate Android project
-    run: npm run tauri android init
+  - name: Accept Android licenses
+    run: yes | sdkmanager --licenses
 
-  - name: Build APK
+  - name: Build Android APK
     run: npm run tauri android build
 
   - name: Upload APK
     uses: actions/upload-artifact@v4
     with:
       name: android-apk
-      path: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+      path: src-tauri/gen/android/app/build/outputs/apk/**/*.apk
