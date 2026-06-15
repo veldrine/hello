@@ -1,4 +1,4 @@
-name: tauri android
+name: tauri android debug
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
         with:
           targets: aarch64-linux-android
 
-      - name: Install Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
       - name: Install dependencies
@@ -40,14 +40,14 @@ jobs:
       - name: Build frontend
         run: npm run build
 
-      - name: Init Android
-        run: npm run tauri android init
+      - name: Build Android Debug APK
+        run: npm run tauri android build --debug
 
-      - name: Build APK
-        run: npm run tauri android build
+      - name: Find APK output
+        run: find src-tauri/gen/android -type f -name "*.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-apk
-          path: src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk
+          name: tauri-debug-apk
+          path: "**/debug/*.apk"
