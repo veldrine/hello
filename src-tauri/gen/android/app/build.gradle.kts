@@ -25,16 +25,14 @@ android {
         versionName = tauriProperties.getProperty("tauri.android.versionName", "1.0")
     }
 
-    // --- TAMBAHAN SIGNING CONFIG ---
     signingConfigs {
         create("release") {
-            storeFile = if (System.getenv("KEYSTORE_PATH") != null) file(System.getenv("KEYSTORE_PATH")) else file("release.keystore")
+            storeFile = file("release.keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
     }
-    // -------------------------------
 
     buildTypes {
         getByName("debug") {
@@ -50,9 +48,7 @@ android {
             }
         }
         getByName("release") {
-            // --- TAMBAHAN SIGNING CONFIG ---
             signingConfig = signingConfigs.getByName("release")
-            // -------------------------------
             isMinifyEnabled = true
             proguardFiles(
                 *fileTree(".") { include("**/*.pro") }

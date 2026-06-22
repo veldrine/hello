@@ -30,16 +30,17 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Decode Keystore
+      # Decode dan pindahkan ke folder tempat gradle mencarinya
+      - name: Decode and Move Keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
+          mv release.keystore src-tauri/gen/android/app/release.keystore
 
       - name: Install dependencies
         run: npm install
 
       - name: Build Release APK
         env:
-          KEYSTORE_PATH: ${{ github.workspace }}/release.keystore
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
